@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By.ByCssSelector;
 
 public class HomePageTests {
     WebDriver driver;
@@ -364,18 +365,99 @@ public class HomePageTests {
             System.out.println(textInput2.getText());
 
             WebElement textAreaLabel = driver.findElement(By.xpath("//label/textarea[@class = 'form-control']")); // Xpath + Potomok
-            System.out.println(textAreaLabel);
+            System.out.println(textAreaLabel.getText());
 
             WebElement textAreaInput = driver.findElement(By.cssSelector("textarea.form-control")); // CSS Selector: Tag + Class
-            System.out.println(textAreaInput);
+            System.out.println(textAreaInput.getText());
 
             WebElement disabledLabel = driver.findElement(By.xpath("//label[contains(text(),'Disabled input')]"));
-            System.out.println(disabledLabel);
+            System.out.println(disabledLabel.getText());
 
             WebElement disabledInput = driver.findElement(By.cssSelector("input[name='my-disabled']")); // CSS Selector: Tag + Attribute
-            System.out.println(disabledInput);
+            System.out.println(disabledInput.getText());
 
+            WebElement readonlyLabel = driver.findElement(By.xpath("//label[normalize-space(.)='Readonly input']")); // XPath 
+            System.out.println(readonlyLabel.getText());
+
+            WebElement readonlyInput = driver.findElement(By.cssSelector("[value='Readonly input']")); // CSS Selector: Attribute
+            System.out.println(readonlyInput.getText());
+
+            WebElement returnToIndexButton = driver.findElement(By.linkText("Return to index")); // BASE: By link text
+            System.out.println(returnToIndexButton.getText());
+
+            WebElement dropDownSelectLabel = driver.findElement(By.xpath("//select[@class='form-select']/parent::label")); // XPath Search by Parent
+            System.out.println(dropDownSelectLabel.getText());
+
+            WebElement dropDownSelect = driver.findElement(By.xpath("//select[@class='form-select']"));
+            System.out.println(dropDownSelect.getText());
+
+            WebElement dropDownDatalistLabel = driver.findElement(By.xpath("//input[@name='my-datalist']/parent::label"));
+            System.out.println(dropDownDatalistLabel.getText());
+
+            WebElement dropDownDatalist = driver.findElement(By.xpath("//input[@placeholder='Type to search...']"));
+            System.out.println(dropDownDatalist.getText());
+
+            WebElement fileInputLabel = driver.findElement(By.xpath("//input[@type='file']/parent::label"));
+            System.out.println(fileInputLabel.getText());
+
+            WebElement fileInput = driver.findElement(By.xpath("//input[@class='form-control' and @type='file']")); // XPath + AND
+            System.out.println(fileInput.getText());
+
+            WebElement checkBox = driver.findElement(By.xpath("//input[@type='checkbox']"));
+            System.out.println(checkBox.getText());
+
+            WebElement checkedBoxLabel = driver.findElement(By.xpath("//input[@type='checkbox' and @id = 'my-check-1']/parent::label"));
+            System.out.println(checkedBoxLabel.getText());
+
+            WebElement checkBox2 = driver.findElement(By.xpath("//input[@type='checkbox' and @id = 'my-check-2']"));
+            System.out.println(checkBox2.getText());
+
+            WebElement checkBox2Label = driver.findElement(By.xpath("//input[@type='checkbox' and @id = 'my-check-2']/parent::label"));
+            System.out.println(checkBox2Label.getText());
+
+            WebElement radio1 = driver.findElement(By.xpath("//input[@id = 'my-radio-1']"));
+            System.out.println(radio1.getText());
+
+            WebElement radio1Label = driver.findElement(By.xpath("//input[@id = 'my-radio-1']/parent::label"));
+            System.out.println(radio1Label.getText()); 
+
+            WebElement radio2 = driver.findElement(By.xpath("//input[@id = 'my-radio-2']"));
+            System.out.println(radio2.getText());
+
+            WebElement radio2Label = driver.findElement(By.xpath("//input[@id = 'my-radio-2']/parent::label"));
+            System.out.println(radio2Label.getText()); 
+
+            WebElement submitButton = driver.findElement(By.cssSelector("button[type='submit']")); // CSS Selector: attribute + tag
+            System.out.println(submitButton.getText());
+
+            WebElement line = driver.findElement(By.className("my-4"));
+            System.out.println(line);
+
+            WebElement colorsLabel = driver.findElement(By.xpath("//input[@name='my-colors']/parent::label"));
+            System.out.println(colorsLabel.getText());
+
+            WebElement colors = driver.findElement(By.xpath("//input[@name='my-colors']"));
+            System.out.println(colors.getText());
+
+            WebElement dateColorLabel = driver.findElement(By.xpath("//input[@name='my-date']/parent::label"));
+            System.out.println(dateColorLabel.getText());
+
+            WebElement dateColor = driver.findElement(By.xpath("//input[@name='my-date']"));
+            System.out.println(dateColor.getText());
+
+            WebElement myRangeLabel = driver.findElement(By.xpath("//input[@name='my-range']/parent::label"));
+            System.out.println(myRangeLabel.getText());
+
+            WebElement myRange = driver.findElement(By.xpath("//input[@name='my-range']"));
+            System.out.println(myRange.getText());
+
+            WebElement footerSpan = driver.findElement(By.xpath("//span[@class='text-muted']"));
+            System.out.println(footerSpan.getText());
+
+            WebElement footerLink = driver.findElement(By.cssSelector("a[href='./index.html']"));
+            System.out.println(footerLink.getText());
         }
+
     }
 
     // @Test
