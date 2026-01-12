@@ -2,6 +2,7 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Paths;
@@ -11,9 +12,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 public class InteractionElementsTests {
@@ -141,17 +144,64 @@ public class InteractionElementsTests {
     @Test
     void navigationTest(){
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/navigation1.html");
-        WebElement secondPage = driver.findElement(By.xpath("//a[text()= '2']"));
-        WebElement thirdPage = driver.findElement(By.xpath("//a[text()= '3']"));
-        WebElement NextPage = driver.findElement(By.xpath("//a[text()= 'Next']"));
-        WebElement PreviousPage = driver.findElement(By.xpath("//a[text()= 'Previous']"));
-                
-        List<WebElement> pages = List.of(secondPage, thirdPage);
+        
+        List<String> pages = List.of("2", "3");
 
-        for(WebElement p: pages){
-            p.click();
-            String url = driver.getCurrentUrl();
-            assertTrue(url.contains(p.getText()));
+        for(String pageNumber: pages){
+            driver.findElement(By.xpath("//a[text()='" + pageNumber + "']")).click();
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.endsWith("navigation" + pageNumber +  ".html"));
+            
+            WebElement activeLink = driver.findElement(By.xpath("//li[contains(@class,'active')]/a"));
+            assertEquals(pageNumber, activeLink.getText());
         }
+    }
+
+    @Test
+    void leftDropdownTest(){
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/dropdown-menu.html");
+
+        WebElement leftClickDropdown = driver.findElement(By.id("my-dropdown-1"));
+
+        leftClickDropdown.click();
+        WebElement leftDropdownMenu = driver.findElement(By.cssSelector(".dropdown-menu.show"));
+        
+        assertTrue(leftDropdownMenu.isDisplayed());
+    }
+
+    @Test
+    void rightDropdownTest(){
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/dropdown-menu.html");
+        Actions actions = new Actions(driver);
+        WebElement rightClickDropdown = driver.findElement(By.id("my-dropdown-2"));
+        
+        actions.contextClick(rightClickDropdown).perform();
+        WebElement rightClickDropdownMenu = driver.findElement(By.id("context-menu-2"));
+        assertTrue(rightClickDropdownMenu.isDisplayed());
+    }
+
+    @Test
+    void doubleDropdownTest(){
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/dropdown-menu.html");
+        Actions actions = new Actions(driver);
+        WebElement doubleClickDropdown = driver.findElement(By.id("my-dropdown-3"));
+        
+        actions.doubleClick(doubleClickDropdown).perform();
+        WebElement doubleClickDropdownMenu = driver.findElement(By.id("context-menu-3"));
+        assertTrue(doubleClickDropdownMenu.isDisplayed());
+    }
+
+    @Test
+    void dragAndDropTest(){
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/drag-and-drop.html");
+        Actions actions = new Actions(driver);
+
+        WebElement draggableElement = driver.findElement(By.xpath("//div[@id='draggable']"));
+        Point elementCoordinatesBeforeDragging = draggableElement.getLocation();
+
+        actions.dragAndDrop(draggableElement, driver.findElement(By.id("target"))).perform();;
+        Point elementCoordinatesAfterDragging = draggableElement.getLocation();
+
+        assertNotEquals(elementCoordinatesBeforeDragging, elementCoordinatesAfterDragging);
     }
 }
