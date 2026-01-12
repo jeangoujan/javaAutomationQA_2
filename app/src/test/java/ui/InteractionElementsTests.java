@@ -21,11 +21,13 @@ import org.openqa.selenium.support.ui.Select;
 
 public class InteractionElementsTests {
     WebDriver driver;
+    Actions actions;
     private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/web-form.html";
 
     @BeforeEach
     void setup(){
         driver = new ChromeDriver();
+        actions = new Actions(driver);
         driver.get(BASE_URL);
         driver.manage().window().maximize();
     }
@@ -172,7 +174,6 @@ public class InteractionElementsTests {
     @Test
     void rightDropdownTest(){
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/dropdown-menu.html");
-        Actions actions = new Actions(driver);
         WebElement rightClickDropdown = driver.findElement(By.id("my-dropdown-2"));
         
         actions.contextClick(rightClickDropdown).perform();
@@ -183,7 +184,6 @@ public class InteractionElementsTests {
     @Test
     void doubleDropdownTest(){
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/dropdown-menu.html");
-        Actions actions = new Actions(driver);
         WebElement doubleClickDropdown = driver.findElement(By.id("my-dropdown-3"));
         
         actions.doubleClick(doubleClickDropdown).perform();
@@ -194,7 +194,6 @@ public class InteractionElementsTests {
     @Test
     void dragAndDropTest(){
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/drag-and-drop.html");
-        Actions actions = new Actions(driver);
 
         WebElement draggableElement = driver.findElement(By.xpath("//div[@id='draggable']"));
         Point elementCoordinatesBeforeDragging = draggableElement.getLocation();
