@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import utils.WebStorageHelper;
+
 
 
 import java.time.Duration;
@@ -217,7 +219,7 @@ public class waitsTest {
     }
 
     @Test
-    void launchModalSaveChangesTest() throws InterruptedException{
+    void launchModalSaveChangesTest(){
         String endpoint = "dialog-boxes.html";
         driver.get(BASE_URL + endpoint); 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -233,7 +235,7 @@ public class waitsTest {
     }
 
     @Test
-    void launchModalCloseTest() throws InterruptedException{
+    void launchModalCloseTest(){
         String endpoint = "dialog-boxes.html";
         driver.get(BASE_URL + endpoint); 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -246,5 +248,43 @@ public class waitsTest {
         
         assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'You chose:')]")).isDisplayed());
         assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'Close')]")).isDisplayed());
+    }
+
+    @Test
+    void localStorageTest() throws InterruptedException{ 
+        String endpoint = "web-storage.html";
+        driver.get(BASE_URL + endpoint);   
+
+        WebElement displayLocalStorageButton = driver.findElement(By.id("display-local"));
+        displayLocalStorageButton.click();
+
+        assertTrue(driver.findElement(By.xpath("//p[text()='{}']")).isDisplayed());
+
+        WebStorageHelper storage = new WebStorageHelper(driver);
+        storage.setLocalStorageItem("test", "value");
+
+        displayLocalStorageButton.click();
+        assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'test')]")).isDisplayed());
+        assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'value')]")).isDisplayed());
+    }
+
+    @Test
+    void sessionStorageTest(){ 
+        String endpoint = "web-storage.html";
+        driver.get(BASE_URL + endpoint);   
+
+        WebElement displaySessionStorageButton = driver.findElement(By.id("display-session"));
+        displaySessionStorageButton.click();
+ 
+        assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'lastname')]")).isDisplayed());
+        assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'Doe')]")).isDisplayed());
+        assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'name')]")).isDisplayed());
+        assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'John')]")).isDisplayed());
+ 
+        WebStorageHelper storage = new WebStorageHelper(driver);
+        storage.clearSessionStorage();
+
+        displaySessionStorageButton.click();
+        assertTrue(driver.findElement(By.xpath("//p[text()='{}']")).isDisplayed());
     }
 }
