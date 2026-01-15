@@ -5,5 +5,5 @@
 build
 
 # secrets:
-*-secret.properties
+secret.properties
 secrets.properties
