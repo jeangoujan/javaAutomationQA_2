@@ -1,15 +1,12 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import utils.ConfigLoader;
 import utils.WebStorageHelper;
-
-
-
-import java.time.Duration;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -27,15 +24,18 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import constants.TestConfig;
+
 public class waitsTest {
     WebDriver driver;
     Actions actions;
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/";
+    
 
     @BeforeEach
     void setup(){
         driver = new ChromeDriver();
-        driver.get(BASE_URL);
+        driver.get(ConfigLoader.get("base.url"));
+        System.out.println(driver.getCurrentUrl());
         actions = new Actions(driver);
         driver.manage().window().maximize();
     }
@@ -45,11 +45,12 @@ public class waitsTest {
         driver.quit();
     }
 
+
+
     @Test
-    void infiniteScrollTest() throws InterruptedException{
-        String endpoint = "infinite-scroll.html";
-        driver.get(BASE_URL + endpoint);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    void infiniteScrollTest(){
+        driver.get(TestConfig.BASE_URL + TestConfig.INFINITE_SCROLL_ENDPOINT);
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("p")));
         
         List<WebElement> paragraphsBefore = driver.findElements(By.xpath("//div[@id='content']//p"));
@@ -65,8 +66,7 @@ public class waitsTest {
 
     @Test
     void shadowDomTest(){
-        String endpoint = "shadow-dom.html";
-        driver.get(BASE_URL + endpoint);
+        driver.get(TestConfig.BASE_URL + TestConfig.SHADOW_DOM_ENDPOINT);
         WebElement content = driver.findElement(By.id("content"));
 
         SearchContext shadowRoot = content.getShadowRoot();
@@ -78,8 +78,7 @@ public class waitsTest {
 
     @Test
     void isCookiesDisplayedTest(){
-        String endpoint = "cookies.html";
-        driver.get(BASE_URL + endpoint);
+        driver.get(TestConfig.BASE_URL + TestConfig.COOKIES_ENDPOINT);
 
         WebElement displayCookieButton = driver.findElement(By.id("refresh-cookies"));
         displayCookieButton.click();
@@ -91,8 +90,7 @@ public class waitsTest {
 
     @Test
     void isCookiesDeletedTest(){
-        String endpoint = "cookies.html";
-        driver.get(BASE_URL + endpoint);
+        driver.get(TestConfig.BASE_URL + TestConfig.COOKIES_ENDPOINT);
         driver.manage().deleteAllCookies();
 
         WebElement displayCookieButton = driver.findElement(By.id("refresh-cookies"));
@@ -106,8 +104,7 @@ public class waitsTest {
 
     @Test
     void isCookiesEditedTest(){
-        String endpoint = "cookies.html";
-        driver.get(BASE_URL + endpoint);
+        driver.get(TestConfig.BASE_URL + TestConfig.COOKIES_ENDPOINT);
         Cookie cookie = driver.manage().getCookieNamed("username");
         assertEquals("John Doe", cookie.getValue());
 
@@ -121,13 +118,12 @@ public class waitsTest {
 
     @Test
     void iFramesTest(){
-        String endpoint = "iframes.html";
-        driver.get(BASE_URL + endpoint);
+        driver.get(TestConfig.BASE_URL + TestConfig.IFRAMES_ENDPOINT);
         
         WebElement iframe = driver.findElement(By.id("my-iframe"));
         driver.switchTo().frame(iframe);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("p")));
 
         assertTrue(driver.findElement(By.xpath("(//p)[1]")).isDisplayed());
@@ -136,9 +132,8 @@ public class waitsTest {
 
     @Test
     void launchAlertTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
         
         driver.findElement(By.id("my-alert")).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -149,9 +144,8 @@ public class waitsTest {
 
     @Test
     void launchConfirmOkTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
 
         driver.findElement(By.id("my-confirm")).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -162,9 +156,8 @@ public class waitsTest {
 
     @Test
     void launchConfirmCancelTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
 
         driver.findElement(By.id("my-confirm")).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -175,9 +168,8 @@ public class waitsTest {
 
     @Test
     void launchPromptWithTextTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
 
         driver.findElement(By.id("my-prompt")).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -192,9 +184,8 @@ public class waitsTest {
 
     @Test
     void launchPromptCancelTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
 
         driver.findElement(By.id("my-prompt")).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -206,9 +197,8 @@ public class waitsTest {
 
     @Test
     void launchPromptEmptyStringTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
 
         driver.findElement(By.id("my-prompt")).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -220,9 +210,8 @@ public class waitsTest {
 
     @Test
     void launchModalSaveChangesTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
 
         driver.findElement(By.id("my-modal")).click();
         
@@ -236,9 +225,8 @@ public class waitsTest {
 
     @Test
     void launchModalCloseTest(){
-        String endpoint = "dialog-boxes.html";
-        driver.get(BASE_URL + endpoint); 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TestConfig.BASE_URL + TestConfig.DIALOG_BOXES_ENDPOINT); 
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.DEFAULT_TIMEOUT);
 
         driver.findElement(By.id("my-modal")).click();
         
@@ -251,9 +239,8 @@ public class waitsTest {
     }
 
     @Test
-    void localStorageTest() throws InterruptedException{ 
-        String endpoint = "web-storage.html";
-        driver.get(BASE_URL + endpoint);   
+    void localStorageTest(){ 
+        driver.get(TestConfig.BASE_URL + TestConfig.WEB_STORAGE_ENDPOINT);   
 
         WebElement displayLocalStorageButton = driver.findElement(By.id("display-local"));
         displayLocalStorageButton.click();
@@ -270,8 +257,7 @@ public class waitsTest {
 
     @Test
     void sessionStorageTest(){ 
-        String endpoint = "web-storage.html";
-        driver.get(BASE_URL + endpoint);   
+        driver.get(TestConfig.BASE_URL + TestConfig.WEB_STORAGE_ENDPOINT);   
 
         WebElement displaySessionStorageButton = driver.findElement(By.id("display-session"));
         displaySessionStorageButton.click();
@@ -287,4 +273,38 @@ public class waitsTest {
         displaySessionStorageButton.click();
         assertTrue(driver.findElement(By.xpath("//p[text()='{}']")).isDisplayed());
     }
+    
+    @Test
+    void loadingImagesTest(){
+        driver.get(TestConfig.BASE_URL + TestConfig.LOADING_IMAGES_ENDPOINT);   
+
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.LONG_TIMEOUT);
+
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.tagName("img"), 4));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("landscape")));
+
+        assertTrue(driver.findElement(By.id("compass")).isDisplayed());
+        assertTrue(driver.findElement(By.id("calendar")).isDisplayed());
+        assertTrue(driver.findElement(By.id("award")).isDisplayed());
+        assertTrue(driver.findElement(By.id("landscape")).isDisplayed());
+       }
+
+    @Test
+    void slowCalculatorTest(){
+        driver.get(TestConfig.BASE_URL + TestConfig.SLOW_CALCULATOR_ENDPOINT);   
+
+        WebDriverWait wait = new WebDriverWait(driver, TestConfig.SHORT_TIMEOUT);
+        
+        driver.findElement(By.xpath("//span[text()='2']")).click();
+        driver.findElement(By.xpath("//span[text()='+']")).click();
+        driver.findElement(By.xpath("//span[text()='2']")).click();
+        driver.findElement(By.xpath("//span[text()='=']")).click();
+
+        WebElement screen = driver.findElement(By.className("screen"));
+        wait.until(ExpectedConditions.textToBePresentInElement(screen, "4"));
+
+        String actualResult = screen.getText().trim();
+        assertEquals("4", actualResult);
+    }
+
 }
