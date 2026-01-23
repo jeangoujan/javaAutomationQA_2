@@ -14,6 +14,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import io.qameta.allure.Allure;
+
 class BaseTest {
     WebDriver driver;
     protected static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/";
@@ -33,8 +35,8 @@ class BaseTest {
 
     private void initDriver(){
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
-        System.out.println("SELENIUM_REMOTE_URL = " + remoteUrl);
-        if (remoteUrl != null) {
+        Allure.addAttachment("remote", remoteUrl);
+        if (remoteUrl != null || !remoteUrl.isEmpty()) {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--headless");
             options.addArguments("--disable-gpu");

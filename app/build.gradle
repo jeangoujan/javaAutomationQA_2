@@ -25,6 +25,7 @@ dependencies {
     testImplementation libs.guava
     testImplementation "org.seleniumhq.selenium:selenium-java:4.39.0"
     testImplementation 'org.aeonbits.owner:owner:1.0.12'
+    implementation 'io.qameta.allure:allure-junit5:2.29.1' 
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -46,5 +47,5 @@ tasks.named('test') {
 
 test {
     useJUnitPlatform()
-    systemProperties(system.getProperties())
+    systemProperties(System.getProperties())
 }
