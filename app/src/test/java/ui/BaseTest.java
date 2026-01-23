@@ -34,7 +34,7 @@ class BaseTest {
     private void initDriver(){
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
         System.out.println("SELENIUM_REMOTE_URL = " + remoteUrl);
-        if (remoteUrl != null && !remoteUrl.isEmpty()) {
+        if (remoteUrl != null) {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--headless");
             options.addArguments("--disable-gpu");
