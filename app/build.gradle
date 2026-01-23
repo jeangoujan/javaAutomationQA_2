@@ -48,4 +48,6 @@ tasks.named('test') {
 test {
     useJUnitPlatform()
     systemProperties(System.getProperties())
+    systemProperty "allure.results.directory",
+                   "$buildDir/allure-results"
 }
