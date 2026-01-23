@@ -24,6 +24,7 @@ dependencies {
     // This dependency is used by the application.
     testImplementation libs.guava
     testImplementation "org.seleniumhq.selenium:selenium-java:4.39.0"
+    testImplementation 'org.aeonbits.owner:owner:1.0.12'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

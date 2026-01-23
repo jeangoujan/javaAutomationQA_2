@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import utils.ConfigLoader;
+import utils.OwnerConfig;
 import utils.WebStorageHelper;
 import java.util.List;
 
@@ -34,8 +35,7 @@ public class waitsTest {
     @BeforeEach
     void setup(){
         driver = new ChromeDriver();
-        driver.get(ConfigLoader.get("base.url"));
-        System.out.println(driver.getCurrentUrl());
+        driver.get(OwnerConfig.get().baseUrl());
         actions = new Actions(driver);
         driver.manage().window().maximize();
     }
@@ -45,6 +45,14 @@ public class waitsTest {
         driver.quit();
     }
 
+    @Test
+    void loginFormTest(){
+        driver.get(TestConfig.BASE_URL + TestConfig.LOGIN_FORM_ENDPOINT);
+        driver.findElement(By.id("username")).sendKeys(ConfigLoader.getSecret("login.username"));
+        driver.findElement(By.id("password")).sendKeys(ConfigLoader.getSecret("login.password"));
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+    }
 
 
     @Test

@@ -6,20 +6,29 @@ import java.util.Properties;
 public class ConfigLoader {
 
     private static final Properties properties = new Properties();
+    private static final Properties secrets = new Properties();
 
     static {
+        load("test.properties", properties, true);
+        load("secret.properties", secrets, false); // optional
+    }
+
+    private static void load(String file, Properties target, boolean required) {
         try (InputStream is = ConfigLoader.class
                 .getClassLoader()
-                .getResourceAsStream("test.properties")) {
+                .getResourceAsStream(file)) {
 
             if (is == null) {
-                throw new RuntimeException("test.properties not found");
+                if (required) {
+                    throw new RuntimeException(file + " not found");
+                }
+                return; // secret.properties может не существовать
             }
 
-            properties.load(is);
+            target.load(is);
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load properties", e);
+            throw new RuntimeException("Failed to load " + file, e);
         }
     }
 
@@ -28,22 +37,20 @@ public class ConfigLoader {
     }
 
     public static String getSecret(String key) {
-    // преобразуем ключ в ENV-формат
-    String envKey = key.toUpperCase().replace('.', '_');
+        String envKey = key.toUpperCase().replace('.', '_');
 
-    // 1. пробуем ENV
-    String envValue = System.getenv(envKey);
-    if (envValue != null && !envValue.isBlank()) {
-        return envValue;
+        // 1. ENV
+        String envValue = System.getenv(envKey);
+        if (envValue != null && !envValue.isBlank()) {
+            return envValue;
+        }
+
+        // 2. secret.properties
+        String secretValue = secrets.getProperty(key);
+        if (secretValue != null && !secretValue.isBlank()) {
+            return secretValue;
+        }
+
+        throw new RuntimeException("Secret not found: " + key);
     }
-
-    // 2. fallback в properties
-    String propValue = properties.getProperty(key);
-    if (propValue != null && !propValue.isBlank()) {
-        return propValue;
-    }
-
-    // 3. если нигде нет — это ошибка
-    throw new RuntimeException("Secret not found: " + key);
-}
 }

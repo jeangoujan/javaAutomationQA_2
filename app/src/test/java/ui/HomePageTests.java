@@ -3,7 +3,7 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +13,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.By.ByCssSelector;
 
 public class HomePageTests {
     WebDriver driver;
@@ -466,19 +465,5 @@ public class HomePageTests {
     //     assertEquals("Hands-On Selenium WebDriver with Java", actualtitle);
     // }    
 
-    // @Test
-    // void openWebFormTest(){
-    //     // WebElement webFormLink = driver.findElement(By.xpath("//a[@href='web-form.html']"));
-    //     //webFormLink.click();
-    //     // driver.findElement(By.xpath("//h5[text() = 'Chapter 3. Webdriver Fundamentals']/../a[contains(@href, 'web-form')]")).click();
 
-    //     String webFormUrl = "web-form.html";
-    //     driver.findElement(By.linkText("Web form")).click();
-
-    //     String currentUrl = driver.getCurrentUrl();
-    //     WebElement title = driver.findElement(By.className("display-6"));
-
-    //     assertEquals(BASE_URL + webFormUrl, currentUrl);
-    //     assertEquals("Web form", title.getText()); // title сам по себе не сохраняет в переменной текст, поэтому требуется добавить метод getTest() чтобы можно было сравнить
-    // } 
 
