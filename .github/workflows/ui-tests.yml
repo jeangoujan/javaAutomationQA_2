@@ -10,6 +10,9 @@ jobs:
   ui-tests:
     runs-on: ubuntu-latest
 
+    env:
+      SELENIUM_REMOTE_URL: http://localhost:4444
+
     services:
       selenium:
         image: selenium/standalone-chrome:latest
@@ -36,8 +39,7 @@ jobs:
           echo "SELENIUM_REMOTE_URL=$SELENIUM_REMOTE_URL"
 
       - name: Run UI tests
-        env:
-          SELENIUM_REMOTE_URL: http://localhost:4444
+
         run: ./gradlew test
         continue-on-error: true
 
