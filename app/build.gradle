@@ -50,4 +50,5 @@ test {
     systemProperties(System.getProperties())
     systemProperty "allure.results.directory",
                    "$buildDir/allure-results"
+    environment "SELENIUM_REMOTE_URL", System.getenv("SELENIUM_REMOTE_URL")
 }

@@ -30,9 +30,14 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # 🔍 DEBUG — ОБЯЗАТЕЛЬНО
+      - name: Debug Selenium URL
+        run: |
+          echo "SELENIUM_REMOTE_URL=$SELENIUM_REMOTE_URL"
+
       - name: Run UI tests
         env:
-          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+          SELENIUM_REMOTE_URL: http://localhost:4444
         run: ./gradlew test
         continue-on-error: true
 

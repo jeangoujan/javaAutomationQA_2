@@ -21,7 +21,7 @@ class BaseTest {
     protected static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/";
     
     @BeforeEach
-    void setup(){
+    void setup() throws MalformedURLException{
         initDriver();
         driver.get(BASE_URL);
         driver.manage().window().maximize();
@@ -33,24 +33,19 @@ class BaseTest {
         driver.quit();
     }
 
-    private void initDriver(){
+    private void initDriver() throws MalformedURLException {
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
-        Allure.addAttachment("remote", remoteUrl);
 
-        if (remoteUrl != null && !remoteUrl.isEmpty()) {
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
-            options.addArguments("--disable-gpu");
-            options.addArguments("--no-sandbox");
-            options.addArguments("--disable-dev-shm-usage");
-            options.setCapability("goog:loggingPrefs", Map.of("browser", "ALL"));
-            try {
-                driver = new RemoteWebDriver(URI.create(remoteUrl).toURL(), options);
-            } catch(MalformedURLException e) {
-                throw new RuntimeException("Malformed URL for Selenium Remote WebDriver", e); 
-            }
-        } else{
-            driver = new ChromeDriver();
+        if (remoteUrl == null || remoteUrl.isEmpty()) {
+            throw new RuntimeException("SELENIUM_REMOTE_URL is NOT set");
         }
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+
+        driver = new RemoteWebDriver(URI.create(remoteUrl).toURL(), options);
     }
 }
