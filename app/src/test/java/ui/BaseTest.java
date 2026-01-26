@@ -24,13 +24,20 @@ class BaseTest {
     void setup() throws MalformedURLException{
         initDriver();
         driver.get(BASE_URL);
-        driver.manage().window().maximize();
+        if (!(driver instanceof RemoteWebDriver)) {
+            driver.manage().window().maximize();
+        }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
     }
 
     @AfterEach
     void tearDown(){
-        driver.quit();
+            if (driver != null) {
+        try {
+            driver.quit();
+        } catch (Exception ignored) {
+        }
+    }
     }
 
     private void initDriver() {
