@@ -33,19 +33,24 @@ class BaseTest {
         driver.quit();
     }
 
-    private void initDriver() throws MalformedURLException {
+    private void initDriver() {
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
+        Allure.addAttachment("remote", String.valueOf(remoteUrl));
 
-        if (remoteUrl == null || remoteUrl.isEmpty()) {
-            throw new RuntimeException("SELENIUM_REMOTE_URL is NOT set");
+        if (remoteUrl != null && !remoteUrl.isEmpty()) {
+            try {
+                ChromeOptions options = new ChromeOptions();
+                options.setCapability("browserName", "chrome");
+
+                driver = new RemoteWebDriver(
+                    URI.create(remoteUrl).toURL(),
+                    options
+                );
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Bad Selenium URL", e);
+            }
+        } else {
+            driver = new ChromeDriver();
         }
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-
-        driver = new RemoteWebDriver(URI.create(remoteUrl).toURL(), options);
     }
 }
