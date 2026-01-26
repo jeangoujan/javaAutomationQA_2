@@ -15,7 +15,7 @@ jobs:
 
     services:
       selenium:
-        image: selenium/standalone-chrome:latest
+        image: selenium/standalone-chrome:4.39.0
         options: --shm-size=2g
         ports:
           - 4444:4444
@@ -37,7 +37,16 @@ jobs:
       - name: Debug Selenium URL
         run: |
           echo "SELENIUM_REMOTE_URL=$SELENIUM_REMOTE_URL"
-
+      - name: Wait for Selenium Grid
+        run: |
+          for i in {1..20}; do
+            if curl -s http://localhost:4444/status | grep '"ready":true'; then
+              echo "Selenium Grid is ready"
+              break
+            fi
+            echo "Waiting for Selenium Grid..."
+            sleep 2
+          done
       - name: Run UI tests
 
         run: ./gradlew test

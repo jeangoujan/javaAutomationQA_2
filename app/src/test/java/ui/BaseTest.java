@@ -41,6 +41,7 @@ class BaseTest {
             try {
                 ChromeOptions options = new ChromeOptions();
                 options.setCapability("browserName", "chrome");
+                options.setCapability("platformName", "LINUX");
 
                 driver = new RemoteWebDriver(
                     URI.create(remoteUrl).toURL(),
