@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+      SELENIUM_REMOTE_URL: http://localhost:4444
 
     services:
       selenium:
-        image: selenium/standalone-chrome:4.39.0
+        image: selenium/standalone-chrome:4.21.0-20240214
         options: --shm-size=2g
         ports:
           - 4444:4444
@@ -33,27 +33,36 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # 🔍 DEBUG — ОБЯЗАТЕЛЬНО
+      # ===== DEBUG =====
       - name: Debug Selenium URL
-        run: |
-          echo "SELENIUM_REMOTE_URL=$SELENIUM_REMOTE_URL"
+        run: echo "SELENIUM_REMOTE_URL=$SELENIUM_REMOTE_URL"
+
       - name: Wait for Selenium Grid
         run: |
-          for i in {1..20}; do
+          for i in {1..30}; do
             if curl -s http://localhost:4444/status | grep '"ready":true'; then
               echo "Selenium Grid is ready"
-              break
+              exit 0
             fi
             echo "Waiting for Selenium Grid..."
             sleep 2
           done
-      - name: Run UI tests
+          echo "Selenium Grid did not become ready"
+          exit 1
 
+      # ===== RUN TESTS =====
+      - name: Run UI tests
         run: ./gradlew test
         continue-on-error: true
 
-      # ===== ALLURE =====
+      # ===== SELENIUM LOGS (КРИТИЧНО) =====
+      - name: Dump Selenium logs
+        if: always()
+        run: |
+          docker ps
+          docker logs $(docker ps -q)
 
+      # ===== ALLURE =====
       - name: Install Allure CLI
         if: always()
         run: |
