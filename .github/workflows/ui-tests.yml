@@ -15,7 +15,7 @@ jobs:
 
     services:
       selenium:
-        image: selenium/standalone-chrome:4.21.0-20240214
+        image: selenium/standalone-chrome:latest
         options: --shm-size=2g
         ports:
           - 4444:4444
@@ -60,7 +60,12 @@ jobs:
         if: always()
         run: |
           docker ps
-          docker logs $(docker ps -q)
+          CONTAINER_ID=$(docker ps -q)
+          if [ -n "$CONTAINER_ID" ]; then
+            docker logs $CONTAINER_ID
+          else
+            echo "No running containers"
+          fi
 
       # ===== ALLURE =====
       - name: Install Allure CLI
