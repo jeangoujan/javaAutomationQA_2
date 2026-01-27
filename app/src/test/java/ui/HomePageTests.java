@@ -1,36 +1,15 @@
 package ui;
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebElement;
 
-public class HomePageTests {
-    WebDriver driver;
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/";
-
-
-    @BeforeEach
-    void setup(){
-        driver = new ChromeDriver();
-        driver.get(BASE_URL);
-        driver.manage().window().maximize();
-    }
-
-    @AfterEach
-    void tearDown(){
-        driver.quit();
-    }
-
+public class HomePageTests extends BaseTest{
 
     @Test
     void chapterThreeTest(){
